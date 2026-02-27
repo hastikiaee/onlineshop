@@ -1,0 +1,40 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment (برای اطمینان اگر استفاده کردی)
+venv/
+env/
+.venv/
+.env/
+
+# pytest cache
+.pytest_cache/
+
+# Django local files
+*.log
+*.pot
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+# Docker
+*.pid
+*.sock
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
