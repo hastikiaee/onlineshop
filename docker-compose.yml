@@ -24,17 +24,7 @@ services:
       - ./backend:/app
     ports:
       - "8000:8000"
-    # این بخش برای اطمینان از اینکه برنامه به دیتابیس وصل می شود
-    # اگر settings.py از این متغیرها استفاده می کند
-    environment:
-      DB_NAME: myshop
-      DB_USER: myshop_user
-      DB_PASSWORD: myshop_password
-      DB_HOST: db
-      DB_PORT: 5432
-    # همچنین اگر SECRET_KEY و DEBUG را از .env می خوانید، باید ان را نگه داریم
-    env_file:
-      - .env
+    
     depends_on:
       - db
     
