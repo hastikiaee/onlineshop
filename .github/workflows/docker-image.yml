@@ -21,13 +21,7 @@ jobs:
         # مثلاً اگر در پوشه 'infra' است: ls -la infra/
         # و سپس در دستورات بعدی از آن مسیر استفاده کنید.
 
-    - name: Create .env file
-      run: |
-        touch .env
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-        echo "DEBUG=True" >> .env
-        # متغیرهای دیگر خود را اینجا اضافه کنید
-
+   
     # بالا آوردن سرویس ها با داکر کامپوز
     # این دستور باید قبل از اجرای تست ها اجرا شود
     - name: Start services with Docker Compose
@@ -36,7 +30,7 @@ jobs:
     # اجرای تست ها - این مرحله باید بلافاصله بعد از بالا آمدن سرویس ها اجرا شود
     - name: Run Tests
       # فرض می کنیم نام سرویس backend است و در مسیر روت قرار دارد
-      run: docker compose run --rm --no-deps web sh -c 'pytest --collect-only -vv'
+      run: docker compose run --rm --no-deps web sh -c 'pytest'
 
 
 
