@@ -23,28 +23,21 @@ jobs:
         touch .env
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
         echo "DEBUG=True" >> .env
-        # اضافه کردن متغیرهای دیتابیس بر اساس docker-compose.yml اصلاح شده
-        echo "POSTGRES_DB=myshop" >> .env
-        echo "POSTGRES_USER=myshop_user" >> .env
-        echo "POSTGRES_PASSWORD=myshop_password" >> .env
-        # اضافه کردن تنظیمات SMTP برای MailHog اگر لازم است
-        echo "EMAIL_HOST=mailhog" >> .env
-        echo "EMAIL_PORT=1025" >> .env
-        echo "EMAIL_USE_TLS=False" >> .env
-        echo "EMAIL_USE_SSL=False" >> .env
-        echo "EMAIL_HOST_USER=" >> .env
-        echo "EMAIL_HOST_PASSWORD=" >> .env
-
+    
     - name: Start services
       run: docker compose up -d
 
+    # مرحله جدید: اجرای migration ها
     - name: Apply database migrations
+      # نام سرویس 'web' فرض شده است. اگر فرق دارد، اصلاح کنید.
+      # اطمینان حاصل کنید که secret های دیتابیس در .env اضافه شده اند اگر لازم است
       run: docker compose exec web sh -c 'python manage.py migrate --noinput'
 
+    # اجرای تست ها
     - name: Run Tests
+      # نام سرویس 'web' فرض شده است. اگر فرق دارد، اصلاح کنید.
       run: docker compose exec web sh -c 'pytest'
 
     - name: Stop services
       if: always()
       run: docker compose down
-
