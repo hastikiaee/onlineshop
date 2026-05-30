@@ -23,10 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "test-secret-key-not-for-prod")
+from decouple import config
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")=="1"
+SECRET_KEY = config("DJANGO_SECRET_KEY", default="test-secret-key-not-for-prod")
+DEBUG = config("DEBUG", default=False, cast=bool)
+
 
 ALLOWED_HOSTS = []
 
