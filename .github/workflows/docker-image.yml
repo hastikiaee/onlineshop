@@ -7,14 +7,37 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-    - name: docker compose
+
+    # این مرحله اضافه شده تا اطمینان حاصل شود که Dockerfile و سایر فایل ها در دسترس هستند
+    - name: Verify file access
+      run: |
+        pwd
+        ls -la
+        find . -maxdepth 4 -name 'Dockerfile*' -print
+
+    # اگر docker-compose.yml شما فایل .env را صدا می زند، این مرحله لازم است
+    # متغیرهای واقعی را باید در GitHub Secrets تعریف کرده باشید
+    - name: Create .env file
+      run: |
+        touch .env
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+        echo "DEBUG=True" >> .env
+        # هر متغیر دیگری که لازم دارید...
+
+    # این مرحله برای بالا آوردن سرویس ها با docker compose است
+    - name: Start services
       run: docker compose up -d
+
+    # اجرای تست ها
     - name: Run Tests
+      # نام سرویس 'backend' فرض شده است. اگر فرق دارد، اصلاح کنید.
       run: docker compose exec backend pytest
+
+    # این مرحله بعد از تست ها برای پاکسازی اضافه شده است
+    - name: Stop services
+      if: always() # این مرحله همیشه اجرا می شود، حتی اگر تست ها Fail شوند
+      run: docker compose down
