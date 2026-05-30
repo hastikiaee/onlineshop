@@ -35,7 +35,7 @@ jobs:
     # اجرای تست ها
     - name: Run Tests
       # نام سرویس 'backend' فرض شده است. اگر فرق دارد، اصلاح کنید.
-      run: ocker compose exec web sh -c 'pytest'
+      run: docker compose exec web sh -c 'pytest'
 
     # این مرحله بعد از تست ها برای پاکسازی اضافه شده است
     - name: Stop services
