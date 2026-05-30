@@ -17,6 +17,9 @@ services:
 
   web:
     build: ./backend
+    environment:
+      SECRET_KEY=test
+      DEBUG=True
     container_name: django_web
     working_dir: /app
     command: python manage.py runserver 0.0.0.0:8000
