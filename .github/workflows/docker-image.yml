@@ -36,7 +36,8 @@ jobs:
     # اجرای تست ها - این مرحله باید بلافاصله بعد از بالا آمدن سرویس ها اجرا شود
     - name: Run Tests
       # فرض می کنیم نام سرویس backend است و در مسیر روت قرار دارد
-      run: docker compose exec web sh -c 'pytest -vv -s'
+      run: docker compose exec web sh -c 'PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -vv -s'
+
 
 
     # پاکسازی - این مرحله همیشه اجرا می شود
