@@ -12,16 +12,39 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # این مرحله برای بالا آوردن سرویس ها با docker compose است
+    - name: Verify file access
+      run: |
+        pwd
+        ls -la
+        find . -maxdepth 4 -name 'Dockerfile*' -print
+
+    - name: Create .env file
+      run: |
+        touch .env
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+        echo "DEBUG=True" >> .env
+        # اضافه کردن متغیرهای دیتابیس بر اساس docker-compose.yml اصلاح شده
+        echo "POSTGRES_DB=myshop" >> .env
+        echo "POSTGRES_USER=myshop_user" >> .env
+        echo "POSTGRES_PASSWORD=myshop_password" >> .env
+        # اضافه کردن تنظیمات SMTP برای MailHog اگر لازم است
+        echo "EMAIL_HOST=mailhog" >> .env
+        echo "EMAIL_PORT=1025" >> .env
+        echo "EMAIL_USE_TLS=False" >> .env
+        echo "EMAIL_USE_SSL=False" >> .env
+        echo "EMAIL_HOST_USER=" >> .env
+        echo "EMAIL_HOST_PASSWORD=" >> .env
+
     - name: Start services
       run: docker compose up -d
 
-    # اجرای تست ها
+    - name: Apply database migrations
+      run: docker compose exec web sh -c 'python manage.py migrate --noinput'
+
     - name: Run Tests
-      # نام سرویس 'backend' فرض شده است. اگر فرق دارد، اصلاح کنید.
       run: docker compose exec web sh -c 'pytest'
 
-    # این مرحله بعد از تست ها برای پاکسازی اضافه شده است
     - name: Stop services
-      if: always() # این مرحله همیشه اجرا می شود، حتی اگر تست ها Fail شوند
+      if: always()
       run: docker compose down
+
