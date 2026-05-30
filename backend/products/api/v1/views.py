@@ -80,7 +80,7 @@ class ProductSizeListView(GenericAPIView,ListModelMixin):
         return self.list(request,*args,**kwargs)
 
 class ProductDetailView(GenericAPIView,RetrieveModelMixin):
-     
+     #نشون دادن یک محصول با variant هاش 
     queryset = Product.objects.filter(is_active=True).prefetch_related(
         Prefetch(
             "variants",
