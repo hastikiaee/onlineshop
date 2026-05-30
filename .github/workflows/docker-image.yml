@@ -36,7 +36,7 @@ jobs:
     # اجرای تست ها - این مرحله باید بلافاصله بعد از بالا آمدن سرویس ها اجرا شود
     - name: Run Tests
       # فرض می کنیم نام سرویس backend است و در مسیر روت قرار دارد
-      run: docker compose exec backend pytest
+      run: docker compose exec web pytest
 
     # پاکسازی - این مرحله همیشه اجرا می شود
     - name: Stop services
