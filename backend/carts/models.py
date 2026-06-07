@@ -4,6 +4,7 @@ from acounts.models import CustomUser
 from inventory.models import ProductVariant
 
 
+
 # Create your models here.
 
 class Cart(models.Model):

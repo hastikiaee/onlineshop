@@ -11,7 +11,7 @@ def variant_image_upload_path(instance, filename):
 class Category(models.Model):
     
     image=models.ImageField(_("image"),upload_to='category/')
-    name=models.CharField(_("name"),max_length=50) 
+    name=models.CharField(_("name"),max_length=50,unique=True) 
     def __str__(self):
         return self.name
 

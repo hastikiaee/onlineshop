@@ -21,3 +21,4 @@ PyYAML==6.0.3
 rest-framework-simplejwt==0.0.2
 sqlparse==0.5.5
 uritemplate==4.2.0
+python-decouple

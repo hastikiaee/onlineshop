@@ -12,6 +12,8 @@ RUN echo "deb http://mirror-linux.runflare.com/debian trixie main" > /etc/apt/so
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# دستور اصلاح شده:
+RUN pip install --no-cache-dir -r requirements.txt -i https://mirror-pypi.runflare.com/simple
+
 
 COPY . .
