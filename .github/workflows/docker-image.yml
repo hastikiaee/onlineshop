@@ -25,13 +25,6 @@ jobs:
     - name: Run Docker Compose up
       run: docker compose up -d # سرویس ها را در پس زمینه اجرا می کند
 
-
-    - name: Wait for PostgreSQL
-      run: |
-  
-        docker compose run --rm wait-for-it -h db -p 5432 -t 60
-
-
     - name: Run Tests with Docker Compose
       run: docker compose run --rm web pytest # فرض می کنیم سرویس شما 'web' نام دارد
 
