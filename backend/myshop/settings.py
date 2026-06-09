@@ -96,6 +96,9 @@ DATABASES = {
         "PASSWORD": config("POSTGRES_PASSWORD", default="myshop_password"),
         "HOST": config("POSTGRES_HOST", default="db"),
         "PORT": config("POSTGRES_PORT", default=5432, cast=int),
+        "TEST": {
+            "NAME": config("POSTGRES_DB", default="myshop"), # یا نامی که دیتابیس تست شما باید داشته باشد
+        },
     }
 }
 # Password validation
