@@ -16,6 +16,8 @@ services:
 
   web:
     build: ./backend
+    env_file:
+      - .env 
     environment:
       # These are the environment variables for the web service
       - POSTGRES_DB=${POSTGRES_DB}
