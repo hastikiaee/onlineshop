@@ -20,7 +20,7 @@ jobs:
       run: docker compose up -d # سرویس ها را در پس زمینه اجرا می کند
 
     - name: Run Tests with Docker Compose
-      run: docker exec djagno-web sh -c "pytest"
+      run: docker exec django_web sh -c "pytest"
     # پاکسازی پس از اتمام تست ها (مهم برای جلوگیری از مصرف منابع)
     - name: Stop Docker Compose services
       if: always() # این دستور حتی اگر تست ها با خطا مواجه شوند هم اجرا می شود
