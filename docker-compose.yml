@@ -43,6 +43,7 @@ services:
       - "8025:8025"   # Web UI
 
   pgadmin:
+    profiles: ["dev"] 
     image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
