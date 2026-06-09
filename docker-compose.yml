@@ -16,7 +16,7 @@ services:
 
   web:
     build: ./backend
-    env_file:
+    env_file: 
       - .env 
     environment:
       # These are the environment variables for the web service
