@@ -20,10 +20,10 @@ def product(db, category):
     )
     product.category.add(category)
     return product
-
+@pytest.mark.django_db
 class TestProductDetailApi():
 
-    @pytest.mark.django_db
+    
     def test_product_detail_status_code_200(self,product,api_client):
         url=reverse("product_detail",kwargs={"pk":product.id})
         response=api_client.get(url)
