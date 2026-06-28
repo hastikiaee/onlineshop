@@ -1,8 +1,31 @@
 from rest_framework import serializers
 from ...models import Product,ProductVariant,Color,Size,Category
 
+
+class ColorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Color
+        fields="__all__"
+
+class SizeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Size
+        fields="__all__"
+
 #variant serializer
 class VariantSerializer(serializers.ModelSerializer):
+
+    color_name = serializers.CharField(
+        source='color.name',
+        read_only=True
+    )
+
+    size_name = serializers.CharField(
+        source='size.name',
+        read_only=True
+    )
 
     class Meta:
         model=ProductVariant
@@ -13,6 +36,7 @@ class VariantSerializer(serializers.ModelSerializer):
 class ProductVariantSerializer(serializers.ModelSerializer):
     
     variants=VariantSerializer(many=True)
+    
     class Meta:
         model=Product
         fields="__all__"
@@ -37,20 +61,10 @@ class ProductSerializer(serializers.ModelSerializer):
         model=Product
         fields="__all__"
 
-class ColorSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model=Color
-        fields="__all__"
-
-class SizeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model=Size
-        fields="__all__"
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Category
-        fields=['name','image']
+        fields=['id','name','image']

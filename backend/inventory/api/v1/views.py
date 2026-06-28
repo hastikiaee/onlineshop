@@ -8,7 +8,7 @@ from ...models import Product,Color,Size,ProductVariant,Category
 from django.db.models import ProtectedError
 
 @api_view(["GET","PUT","DELETE"])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def product_detail_view(request,pk):
     product=get_object_or_404(Product,pk=pk)
     #show product detail and its variants
@@ -27,7 +27,7 @@ def product_detail_view(request,pk):
         return Response({"detail":"product successfully deleted"},status=status.HTTP_204_NO_CONTENT)
 
 @api_view(["GET","POST"])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def product_view(request):
     
     #add product whith at least one variant
@@ -142,7 +142,7 @@ def variant_view(request,pk):
 
 #category
 @api_view(["POST",'GET'])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def category_view(request):
 
     #add category and view list of categorys

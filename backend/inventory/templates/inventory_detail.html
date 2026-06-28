@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Detail</title>
+  
+  <!-- لود کتابخانه jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <style>
+body {
+font-family: Arial, sans-serif;
+background: #f5f5f5;
+margin: 0;
+padding: 40px;
+}
+
+.container {
+max-width: 800px;
+margin: auto;
+background: white;
+padding: 30px;
+border-radius: 10px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.back-btn {
+display: inline-block;
+margin-bottom: 20px;
+padding: 8px 16px;
+background: #333;
+color: white;
+text-decoration: none;
+border-radius: 5px;
+font-size: 14px;
+cursor: pointer;
+border: none;
+}
+
+.back-btn:hover {
+background: #555;
+}
+
+.product-wrapper {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 30px;
+}
+
+/* واکنش‌گرا برای موبایل */
+@media (max-width: 600px) {
+.product-wrapper {
+grid-template-columns: 1fr;
+}
+}
+
+.product-image-container img {
+width: 100%;
+height: auto;
+border-radius: 8px;
+object-fit: cover;
+background: #eee;
+}
+
+.product-info h1 {
+margin-top: 0;
+font-size: 28px;
+color: #333;
+}
+
+.price {
+font-size: 22px;
+color: #2c7a2c;
+font-weight: bold;
+margin: 15px 0;
+}
+
+.description {
+font-size: 16px;
+color: #666;
+line-height: 1.6;
+margin-bottom: 20px;
+}
+
+.loading-text {
+text-align: center;
+font-size: 18px;
+color: #888;
+padding: 40px 0;
+}
+  </style>
+</head>
+<body data-product-id="{{ view.kwargs.pk }}" >
+
+<div  class="container">
+  
+  <!-- دکمه بازگشت به لیست اصلی محصولات -->
+  <a href="products.html" class="back-btn">← بازگشت به لیست محصولات</a>
+
+  <!-- لودینگ موقت (وقتی اطلاعات لود شد، این را مخفی کن و بخش محصول را نشان بده) -->
+
+
+  <!-- بخش اصلی اطلاعات محصول (در ابتدا مخفی است تا داده‌ها دریافت شوند) -->
+<div id="product-content" class="product-wrapper" style="display: none;">
+
+<div class="product-info">
+<!-- نام محصول -->
+<h1 id="product-name">نام محصول</h1>
+<div id="category-list"></div>
+<!-- قیمت محصول -->
+<div id="product-price" class="price">۰ تومان</div>
+<div id="variant-list"></div>
+
+
+<!-- توضیحات محصول -->
+<p id="product-description" class="description">
+توضیحات محصول در این قسمت قرار خواهد گرفت.
+</p>
+</div>
+<button id="edit-btn">ویرایش</button>
+<button id="save-btn" style="display: none;">
+    ذخیره
+</button>
+
+  </div>
+
+</div>
+
+<script>
+   $(document).ready(function(){
+
+    const productId = $('body').data('product-id');
+
+    function getProductUrl(){
+        return `http://localhost:8000/inventory/api/v1/products/${productId}/`;
+    }
+    function getCategoryUrl(){
+        return `http://localhost:8000/inventory/api/v1/categories/`;
+    }
+    let productCategories=[];
+    let allCategories=[];
+    function loadProduct(){
+        $.ajax({
+            url: getProductUrl(),
+            method: 'GET',
+            success: function(data){
+                $('#product-name').text(data.name);
+                $('#product-price').text(data.default_price);
+                $('#product-description').text(data.description);
+                $('#category-list').text(
+                data.category.join(', ')
+                );
+                productCategories=data.category;
+
+                $('#product-content').show();
+                $.each(data.variants,function(index,variant){
+                    $('#variant-list').append(
+                    `
+                    <div class="product-title">${variant.color_name}</div>
+                    <div class="product-title">${variant.size_name}</div>`
+              )},
+
+
+            );
+            },
+            error: function(xhr){
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+    function loadCategories(){
+
+         $.ajax({
+            url: getCategoryUrl(),
+            method: 'GET',
+            success: function(data){
+                console.log(data);
+            allCategories=data
+            },
+            error: function(xhr){
+                console.log(xhr.responseText);
+            }
+        });
+
+    }
+
+    function editProduct(){
+
+        const data={
+            name:$('#edit-name').val(),
+            default_price: $('#edit-price').val(),
+            description: $('#edit-description').val(),
+            category: $('#category').val().map(Number)
+        }
+        $.ajax({
+            url:getProductUrl(),
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+
+            success: function (response) {
+                alert('محصول با موفقیت ویرایش شد');
+                location.reload();
+            },
+
+            error: function (xhr) {
+                console.log(xhr.responseText);
+            }
+
+        })
+    }
+
+    $('#edit-btn').on('click',function(){
+
+            const name = $('#product-name').text();
+            const default_price= $('#product-price').text();
+            const description = $('#product-description').text();
+
+            $('#product-name').replaceWith( `<input id="edit-name" value="${name}">`);
+            $('#product-price').replaceWith(`<input id="edit-price" value="${default_price}">`);
+            $('#product-description').replaceWith(`<textarea id="edit-description">${description}</textarea>`);
+
+            let html ='<select id="category" multiple size="5">';
+            $.each(allCategories,function(index,category){
+                const selected = 
+                productCategories.includes(category.id)
+                ? 'selected'
+                : '';
+                html += `
+                <option value="${category.id}" ${selected}>
+                ${category.name}
+                </option>
+                `;
+            })
+            html += '</select>';
+            $('#category-list').html(html);
+
+           
+
+            $('#edit-btn').hide()
+            $("#save-btn").show()
+            
+    })
+
+    $('#save-btn').on('click',function(){
+        editProduct(productId)
+    })
+
+    loadProduct();
+    loadCategories();
+
+});
+
+
+</script>
+
+</body>
+</html>
