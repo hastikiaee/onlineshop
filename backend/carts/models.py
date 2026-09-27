@@ -10,7 +10,6 @@ from inventory.models import ProductVariant
 class Cart(models.Model):
   
     user=models.OneToOneField(CustomUser,verbose_name=_("user"),on_delete=models.CASCADE,related_name="cart",null=True,blank=True)
-    total_price=models.PositiveBigIntegerField(_("total_price"))
     session=models.CharField(_("session"),blank=True,null=True)
 
     def __str__(self):
@@ -25,7 +24,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
 
-    variant=models.ForeignKey(ProductVariant,verbose_name=_("variant"),on_delete=models.PROTECT,related_name='items')
+    variant=models.ForeignKey(ProductVariant,verbose_name=_("variant"),on_delete=models.PROTECT,related_name='variant')
     quantity=models.PositiveIntegerField(_("quantity"),default=1)
     cart=models.ForeignKey(Cart,verbose_name=_("cart"),on_delete=models.CASCADE,related_name="items")
 

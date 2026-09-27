@@ -132,10 +132,10 @@ padding: 40px 0;
     const productId = $('body').data('product-id');
 
     function getProductUrl(){
-        return `http://localhost:8000/inventory/api/v1/products/${productId}/`;
+        return `/inventory/api/v1/products/${productId}/`;
     }
     function getCategoryUrl(){
-        return `http://localhost:8000/inventory/api/v1/categories/`;
+        return `/inventory/api/v1/categories/`;
     }
     let productCategories=[];
     let allCategories=[];
